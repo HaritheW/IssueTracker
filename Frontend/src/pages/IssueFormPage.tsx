@@ -6,6 +6,11 @@ import LoadingSpinner from '../components/LoadingSpinner'
 import TextArea from '../components/TextArea'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
 import { createIssue, fetchIssueById, updateIssue } from '../redux/issueSlice'
+import type {
+  IssuePriority,
+  IssueSeverity,
+  IssueStatus,
+} from '../utils/types'
 
 export default function IssueFormPage() {
   const { id } = useParams()
@@ -15,9 +20,9 @@ export default function IssueFormPage() {
 
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
-  const [status, setStatus] = useState('Open')
-  const [priority, setPriority] = useState('Medium')
-  const [severity, setSeverity] = useState('Minor')
+  const [status, setStatus] = useState<IssueStatus>('Open')
+  const [priority, setPriority] = useState<IssuePriority>('Medium')
+  const [severity, setSeverity] = useState<IssueSeverity>('Minor')
   const [errors, setErrors] = useState<Record<string, string>>({})
 
   useEffect(() => {
@@ -86,7 +91,7 @@ export default function IssueFormPage() {
           <select
             id="status"
             value={status}
-            onChange={(event) => setStatus(event.target.value)}
+            onChange={(event) => setStatus(event.target.value as IssueStatus)}
           >
             <option value="Open">Open</option>
             <option value="In Progress">In Progress</option>
@@ -99,7 +104,7 @@ export default function IssueFormPage() {
           <select
             id="priority"
             value={priority}
-            onChange={(event) => setPriority(event.target.value)}
+            onChange={(event) => setPriority(event.target.value as IssuePriority)}
           >
             <option value="Low">Low</option>
             <option value="Medium">Medium</option>
@@ -112,7 +117,9 @@ export default function IssueFormPage() {
           <select
             id="severity"
             value={severity}
-            onChange={(event) => setSeverity(event.target.value)}
+            onChange={(event) =>
+              setSeverity(event.target.value as IssueSeverity)
+            }
           >
             <option value="Minor">Minor</option>
             <option value="Major">Major</option>
