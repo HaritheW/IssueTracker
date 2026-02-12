@@ -70,7 +70,6 @@ npm install
 ```
 
 Create a `.env` file in the `Backend` folder:
-(.env values are included to help reviewers set up the project quickly.)
 
 ```env
 MONGO_URI=mongodb+srv://....
