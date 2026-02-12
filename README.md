@@ -73,8 +73,8 @@ Create a `.env` file in the `Backend` folder:
 (.env values are included to help reviewers set up the project quickly.)
 
 ```env
-MONGO_URI=mongodb+srv://admin:harithe2002@cluster0.ynphhn4.mongodb.net/issuetracker?appName=Cluster0
-JWT_SECRET=a4d98f3bdf09b43c17c5e845f93239f1bdf99817b049d91a3c1f32ab5249b3d2
+MONGO_URI=mongodb+srv://....
+JWT_SECRET=a4d...
 PORT=5000
 ```
 
