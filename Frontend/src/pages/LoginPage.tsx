@@ -85,6 +85,9 @@ export default function LoginPage() {
                   type="submit"
                   disabled={loading}
                 />
+                <p className="auth-form-login-prompt">
+                  Don&apos;t have an account? <Link to="/register" className="auth-link">Create one</Link>
+                </p>
               </form>
               <p className="auth-footer">
                 Don’t have an account?{' '}

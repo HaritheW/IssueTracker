@@ -6,6 +6,15 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks'
 import { registerUser } from '../redux/authSlice'
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const MIN_PASSWORD_LENGTH = 6
+const hasCapital = (s: string) => /[A-Z]/.test(s)
+const hasSpecialChar = (s: string) => /[^a-zA-Z0-9]/.test(s)
+function isValidPassword(password: string) {
+  if (password.length < MIN_PASSWORD_LENGTH) return false
+  if (!hasCapital(password)) return false
+  if (!hasSpecialChar(password)) return false
+  return true
+}
 
 export default function RegisterPage() {
   const dispatch = useAppDispatch()
@@ -26,6 +35,7 @@ export default function RegisterPage() {
     if (!email.trim()) errors.email = 'Email is required.'
     if (email && !emailRegex.test(email)) errors.email = 'Invalid email format.'
     if (!password) errors.password = 'Password is required.'
+    else if (!isValidPassword(password)) errors.password = 'Password must be at least 6 characters, include a capital letter and a special character.'
     setFormErrors(errors)
     return Object.keys(errors).length === 0
   }
@@ -74,7 +84,7 @@ export default function RegisterPage() {
                   name="name"
                   value={name}
                   onChange={setName}
-                  placeholder="Jane Doe"
+                  placeholder="Full Name"
                   error={formErrors.name}
                 />
                 <InputField
@@ -95,15 +105,52 @@ export default function RegisterPage() {
                   placeholder="••••••••"
                   error={formErrors.password}
                 />
+                <div className="password-conditions-wrap">
+                  <p className="password-conditions-label">Password requirements</p>
+                  <ul className="password-conditions" aria-live="polite">
+                    <li className={password.length >= MIN_PASSWORD_LENGTH ? 'met' : ''}>
+                      <span className="condition-icon">
+                        {password.length >= MIN_PASSWORD_LENGTH ? (
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden><polyline points="20 6 9 17 4 12" /></svg>
+                        ) : (
+                          <span className="condition-dot" aria-hidden />
+                        )}
+                      </span>
+                      <span>at least 6 characters</span>
+                    </li>
+                    <li className={hasCapital(password) ? 'met' : ''}>
+                      <span className="condition-icon">
+                        {hasCapital(password) ? (
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden><polyline points="20 6 9 17 4 12" /></svg>
+                        ) : (
+                          <span className="condition-dot" aria-hidden />
+                        )}
+                      </span>
+                      <span>at least 1 capital letter</span>
+                    </li>
+                    <li className={hasSpecialChar(password) ? 'met' : ''}>
+                      <span className="condition-icon">
+                        {hasSpecialChar(password) ? (
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden><polyline points="20 6 9 17 4 12" /></svg>
+                        ) : (
+                          <span className="condition-dot" aria-hidden />
+                        )}
+                      </span>
+                      <span>at least one special character</span>
+                    </li>
+                  </ul>
+                </div>
                 <Button
                   label={loading ? 'Creating account...' : 'Create account'}
                   type="submit"
                   disabled={loading}
                 />
+                <p className="auth-form-login-prompt">
+                  Have an account? <Link to="/login" className="auth-link">Log in</Link>
+                </p>
               </form>
               <p className="auth-footer">
-                Already have an account?{' '}
-                <Link to="/login" className="auth-link">Sign in</Link>
+                Already have an account? <Link to="/login" className="auth-link">Log in</Link>
               </p>
             </div>
           </div>
