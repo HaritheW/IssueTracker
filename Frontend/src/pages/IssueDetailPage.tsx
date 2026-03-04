@@ -2,13 +2,8 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import ConfirmationDialog from '../components/ConfirmationDialog'
 import SkeletonLoader from '../components/SkeletonLoader'
-import { useAppDispatch, useAppSelector } from '../redux/hooks'
-import {
-  clearSelectedIssue,
-  deleteIssue,
-  fetchIssueById,
-  updateIssue,
-} from '../redux/issueSlice'
+import { useAuthStore } from '../store/authStore'
+import { useIssueStore } from '../store/issueStore'
 import type { Issue } from '../utils/types'
 
 const statusClass: Record<string, string> = {
@@ -44,21 +39,25 @@ function getCreatorEmail(issue: Issue): string | null {
 
 export default function IssueDetailPage() {
   const { id } = useParams()
-  const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const { selected, loading } = useAppSelector((state) => state.issues)
-  const { user } = useAppSelector((state) => state.auth)
+  const selected = useIssueStore((state) => state.selected)
+  const loading = useIssueStore((state) => state.loading)
+  const fetchIssueById = useIssueStore((state) => state.fetchIssueById)
+  const clearSelectedIssue = useIssueStore((state) => state.clearSelectedIssue)
+  const deleteIssue = useIssueStore((state) => state.deleteIssue)
+  const updateIssue = useIssueStore((state) => state.updateIssue)
+  const user = useAuthStore((state) => state.user)
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [confirmStatus, setConfirmStatus] = useState<null | 'Resolved' | 'Closed'>(
     null
   )
 
   useEffect(() => {
-    if (id) dispatch(fetchIssueById(id))
+    if (id) fetchIssueById(id)
     return () => {
-      dispatch(clearSelectedIssue())
+      clearSelectedIssue()
     }
-  }, [dispatch, id])
+  }, [fetchIssueById, clearSelectedIssue, id])
 
   const isCreator =
     selected?.createdBy &&
@@ -69,13 +68,13 @@ export default function IssueDetailPage() {
 
   const handleDelete = async () => {
     if (!id) return
-    await dispatch(deleteIssue(id))
+    await deleteIssue(id)
     navigate('/issues')
   }
 
   const handleStatusChange = async (status: 'Resolved' | 'Closed') => {
     if (!id) return
-    await dispatch(updateIssue({ id, data: { status } }))
+    await updateIssue({ id, data: { status } })
     setConfirmStatus(null)
   }
 

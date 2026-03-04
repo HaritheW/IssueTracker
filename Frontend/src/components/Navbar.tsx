@@ -1,11 +1,10 @@
 import { Link, NavLink } from 'react-router-dom'
-import { useAppDispatch, useAppSelector } from '../redux/hooks'
-import { logout } from '../redux/authSlice'
+import { useAuthStore } from '../store/authStore'
 import { useTheme } from '../contexts/ThemeContext'
 
 export default function Navbar() {
-  const dispatch = useAppDispatch()
-  const { user } = useAppSelector((state) => state.auth)
+  const user = useAuthStore((state) => state.user)
+  const logout = useAuthStore((state) => state.logout)
   const { theme, toggleTheme } = useTheme()
 
   return (
@@ -46,7 +45,7 @@ export default function Navbar() {
             <button
               type="button"
               className="btn btn-secondary"
-              onClick={() => dispatch(logout())}
+              onClick={() => logout()}
             >
               Logout
             </button>

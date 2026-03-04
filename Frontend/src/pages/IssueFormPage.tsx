@@ -4,8 +4,7 @@ import Button from '../components/Button'
 import InputField from '../components/InputField'
 import LoadingSpinner from '../components/LoadingSpinner'
 import TextArea from '../components/TextArea'
-import { useAppDispatch, useAppSelector } from '../redux/hooks'
-import { createIssue, fetchIssueById, updateIssue } from '../redux/issueSlice'
+import { useIssueStore } from '../store/issueStore'
 import type {
   IssuePriority,
   IssueSeverity,
@@ -14,9 +13,12 @@ import type {
 
 export default function IssueFormPage() {
   const { id } = useParams()
-  const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const { selected, loading } = useAppSelector((state) => state.issues)
+  const selected = useIssueStore((state) => state.selected)
+  const loading = useIssueStore((state) => state.loading)
+  const fetchIssueById = useIssueStore((state) => state.fetchIssueById)
+  const createIssue = useIssueStore((state) => state.createIssue)
+  const updateIssue = useIssueStore((state) => state.updateIssue)
 
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
@@ -26,8 +28,8 @@ export default function IssueFormPage() {
   const [errors, setErrors] = useState<Record<string, string>>({})
 
   useEffect(() => {
-    if (id) dispatch(fetchIssueById(id))
-  }, [dispatch, id])
+    if (id) fetchIssueById(id)
+  }, [fetchIssueById, id])
 
   useEffect(() => {
     if (id && selected) {
@@ -51,17 +53,13 @@ export default function IssueFormPage() {
     event.preventDefault()
     if (!validate()) return
     if (id) {
-      await dispatch(
-        updateIssue({
-          id,
-          data: { title, description, status, priority, severity },
-        })
-      )
+      await updateIssue({
+        id,
+        data: { title, description, status, priority, severity },
+      })
       navigate(`/issues/${id}`)
     } else {
-      await dispatch(
-        createIssue({ title, description, status, priority, severity })
-      )
+      await createIssue({ title, description, status, priority, severity })
       navigate('/issues')
     }
   }

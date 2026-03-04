@@ -414,6 +414,14 @@
 
 .auth-card-inner {
   padding: 2.25rem 2rem;
+  max-height: calc(100vh - 4rem);
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.auth-card-inner::-webkit-scrollbar {
+  display: none;
 }
 
 .auth-heading {

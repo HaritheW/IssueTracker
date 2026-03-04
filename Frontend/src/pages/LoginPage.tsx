@@ -1,35 +1,36 @@
-import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import InputField from '../components/InputField'
-import Button from '../components/Button'
-import { useAppDispatch, useAppSelector } from '../redux/hooks'
-import { loginUser } from '../redux/authSlice'
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import InputField from "../components/InputField";
+import Button from "../components/Button";
+import { useAuthStore } from "../store/authStore";
 
 export default function LoginPage() {
-  const dispatch = useAppDispatch()
-  const navigate = useNavigate()
-  const { user, loading, error } = useAppSelector((state) => state.auth)
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [formErrors, setFormErrors] = useState<Record<string, string>>({})
+  const navigate = useNavigate();
+  const user = useAuthStore((state) => state.user);
+  const loading = useAuthStore((state) => state.loading);
+  const error = useAuthStore((state) => state.error);
+  const loginUser = useAuthStore((state) => state.loginUser);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
-    if (user) navigate('/issues')
-  }, [user, navigate])
+    if (user) navigate("/issues");
+  }, [user, navigate]);
 
   const validate = () => {
-    const errors: Record<string, string> = {}
-    if (!email.trim()) errors.email = 'Email is required.'
-    if (!password) errors.password = 'Password is required.'
-    setFormErrors(errors)
-    return Object.keys(errors).length === 0
-  }
+    const errors: Record<string, string> = {};
+    if (!email.trim()) errors.email = "Email is required.";
+    if (!password) errors.password = "Password is required.";
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
   const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault()
-    if (!validate()) return
-    dispatch(loginUser({ email, password }))
-  }
+    event.preventDefault();
+    if (!validate()) return;
+    loginUser({ email, password });
+  };
 
   return (
     <div className="auth-page">
@@ -37,7 +38,16 @@ export default function LoginPage() {
         <div className="auth-visual">
           <div className="auth-visual-content">
             <div className="auth-logo">
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg
+                width="48"
+                height="48"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
                 <polyline points="14 2 14 8 20 8" />
                 <line x1="16" y1="13" x2="8" y2="13" />
@@ -55,7 +65,9 @@ export default function LoginPage() {
           <div className="auth-card">
             <div className="auth-card-inner">
               <h1 className="auth-heading">Welcome back</h1>
-              <p className="auth-description">Enter your credentials to sign in.</p>
+              <p className="auth-description">
+                Enter your credentials to sign in.
+              </p>
               {error && (
                 <div className="auth-error" role="alert">
                   {error}
@@ -81,22 +93,21 @@ export default function LoginPage() {
                   error={formErrors.password}
                 />
                 <Button
-                  label={loading ? 'Signing in...' : 'Sign in'}
+                  label={loading ? "Signing in..." : "Sign in"}
                   type="submit"
                   disabled={loading}
                 />
                 <p className="auth-form-login-prompt">
-                  Don&apos;t have an account? <Link to="/register" className="auth-link">Create one</Link>
+                  Don&apos;t have an account?{" "}
+                  <Link to="/register" className="auth-link">
+                    Create one
+                  </Link>
                 </p>
               </form>
-              <p className="auth-footer">
-                Don’t have an account?{' '}
-                <Link to="/register" className="auth-link">Create one</Link>
-              </p>
             </div>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

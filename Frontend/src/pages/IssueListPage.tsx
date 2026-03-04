@@ -6,26 +6,29 @@ import SkeletonLoader from '../components/SkeletonLoader'
 import EmptyState from '../components/EmptyState'
 import Pagination from '../components/Pagination'
 import StatsCard from '../components/StatsCard'
-import { useAppDispatch, useAppSelector } from '../redux/hooks'
-import { fetchIssues, fetchStats, setPage } from '../redux/issueSlice'
+import { useIssueStore } from '../store/issueStore'
 import api from '../api/axios'
 
 export default function IssueListPage() {
-  const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const { items, loading, pagination, stats, filters } = useAppSelector(
-    (state) => state.issues
-  )
+  const items = useIssueStore((state) => state.items)
+  const loading = useIssueStore((state) => state.loading)
+  const pagination = useIssueStore((state) => state.pagination)
+  const stats = useIssueStore((state) => state.stats)
+  const filters = useIssueStore((state) => state.filters)
+  const fetchIssues = useIssueStore((state) => state.fetchIssues)
+  const fetchStats = useIssueStore((state) => state.fetchStats)
+  const setPage = useIssueStore((state) => state.setPage)
   const [exporting, setExporting] = useState(false)
   const [showExportMenu, setShowExportMenu] = useState(false)
 
   useEffect(() => {
-    dispatch(fetchStats())
-  }, [dispatch])
+    fetchStats()
+  }, [fetchStats])
 
   useEffect(() => {
-    dispatch(fetchIssues({ q: filters.q }))
-  }, [dispatch, filters, pagination.page, pagination.limit])
+    fetchIssues({ q: filters.q })
+  }, [fetchIssues, filters, pagination.page, pagination.limit])
 
   const handleExport = async (format: 'csv' | 'json') => {
     try {
@@ -168,7 +171,7 @@ export default function IssueListPage() {
       <Pagination
         page={pagination.page}
         totalPages={pagination.totalPages}
-        onPageChange={(page) => dispatch(setPage(page))}
+        onPageChange={(page) => setPage(page)}
       />
     </div>
   )

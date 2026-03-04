@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import InputField from '../components/InputField'
 import Button from '../components/Button'
-import { useAppDispatch, useAppSelector } from '../redux/hooks'
-import { registerUser } from '../redux/authSlice'
+import { useAuthStore } from '../store/authStore'
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const MIN_PASSWORD_LENGTH = 6
@@ -17,9 +16,11 @@ function isValidPassword(password: string) {
 }
 
 export default function RegisterPage() {
-  const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const { user, loading, error } = useAppSelector((state) => state.auth)
+  const user = useAuthStore((state) => state.user)
+  const loading = useAuthStore((state) => state.loading)
+  const error = useAuthStore((state) => state.error)
+  const registerUser = useAuthStore((state) => state.registerUser)
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -43,7 +44,7 @@ export default function RegisterPage() {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault()
     if (!validate()) return
-    dispatch(registerUser({ name, email, password }))
+    registerUser({ name, email, password })
   }
 
   return (
@@ -149,9 +150,6 @@ export default function RegisterPage() {
                   Have an account? <Link to="/login" className="auth-link">Log in</Link>
                 </p>
               </form>
-              <p className="auth-footer">
-                Already have an account? <Link to="/login" className="auth-link">Log in</Link>
-              </p>
             </div>
           </div>
         </div>
