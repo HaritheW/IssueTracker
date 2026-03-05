@@ -1,5 +1,5 @@
 import { Navigate } from 'react-router-dom'
-import { useAuthStore } from '../store/authStore'
+import { useAuthStore } from '../store/zustandStore'
 
 type RequireAuthProps = {
   children: React.ReactElement

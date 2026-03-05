@@ -4,7 +4,7 @@ import Button from '../components/Button'
 import InputField from '../components/InputField'
 import LoadingSpinner from '../components/LoadingSpinner'
 import TextArea from '../components/TextArea'
-import { useIssueStore } from '../store/issueStore'
+import { useIssueStore } from '../store/zustandStore'
 import type {
   IssuePriority,
   IssueSeverity,
