@@ -6,7 +6,7 @@ import SkeletonLoader from '../components/SkeletonLoader'
 import EmptyState from '../components/EmptyState'
 import Pagination from '../components/Pagination'
 import StatsCard from '../components/StatsCard'
-import { useIssueStore } from '../store/zustandStore'
+import { useIssueStore } from '../store/store'
 import api from '../api/axios'
 
 export default function IssueListPage() {

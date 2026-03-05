@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useIssueStore } from '../store/zustandStore'
+import { useIssueStore } from '../store/store'
 import useDebounce from '../utils/useDebounce'
 
 export default function FilterBar() {

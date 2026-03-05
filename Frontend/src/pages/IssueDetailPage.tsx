@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import ConfirmationDialog from '../components/ConfirmationDialog'
 import SkeletonLoader from '../components/SkeletonLoader'
-import { useAuthStore, useIssueStore } from '../store/zustandStore'
+import { useAuthStore } from '../store/store'
+import { useIssueStore } from '../store/store'
 import type { Issue } from '../utils/types'
 
 const statusClass: Record<string, string> = {
