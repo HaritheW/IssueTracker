@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import api from '../api/axios'
 import type { User, Issue, IssueFilters, Pagination } from '../utils/types'
 
-// --- Auth slice ---
+//Auth slice
 type AuthState = {
   user: User | null
   token: string | null
@@ -27,7 +27,7 @@ const authInitial: Omit<AuthState, 'logout' | 'registerUser' | 'loginUser'> = {
   error: null,
 }
 
-// --- Issue slice ---
+//Issue slice
 type IssueState = {
   items: Issue[]
   selected: Issue | null
