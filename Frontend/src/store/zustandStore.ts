@@ -72,7 +72,7 @@ const issueInitial = {
   error: null as string | null,
 }
 
-// --- Combined store type ---
+//Combined store type
 type Store = {
   auth: AuthState
   issues: IssueState
